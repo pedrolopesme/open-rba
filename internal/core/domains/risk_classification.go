@@ -4,8 +4,8 @@ type (
 	RiskClassification string
 
 	Risk struct {
-		Score         float64
-		Classifiction RiskClassification
+		Score          float64
+		Classification RiskClassification
 	}
 )
 
