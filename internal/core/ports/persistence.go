@@ -1,5 +1,5 @@
 package ports
 
 type Repository interface {
-	Insert(row interface{}) error
+	Insert(key string, row interface{}) error
 }

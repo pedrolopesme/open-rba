@@ -31,6 +31,12 @@ func (c CollectorService) Collect(data domains.AuthenticationData) error {
 		return err
 	}
 
-	// TODO: persist data
+	if err := c.persistence.Insert(data.UserID, data); err != nil {
+		c.logger.Error("Cannot save authentication",
+			zap.String("user-id", data.UserID),
+			zap.Error(err),
+		)
+	}
+
 	return nil
 }
