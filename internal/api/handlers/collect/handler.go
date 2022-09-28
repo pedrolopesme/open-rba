@@ -14,6 +14,13 @@ type Handler struct {
 	service ports.Collector
 }
 
+func NewHandler(logger zap.Logger, service ports.Collector) *Handler {
+	return &Handler{
+		logger:  logger,
+		service: service,
+	}
+}
+
 func (h Handler) Handle(ctx echo.Context) error {
 	var payload domains.AuthenticationData
 	if err := ctx.Bind(payload); err != nil {
