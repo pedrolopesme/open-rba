@@ -19,7 +19,7 @@ func NewCollectorService(logger zap.Logger, persistence ports.Repository) *Colle
 }
 
 func (c CollectorService) Collect(data domains.AuthenticationData) error {
-	c.logger.Debug("Collecting authentication data",
+	c.logger.Info("Collecting authentication data",
 		zap.String("user-id", data.UserID),
 	)
 

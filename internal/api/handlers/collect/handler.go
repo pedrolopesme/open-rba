@@ -23,7 +23,7 @@ func NewHandler(logger zap.Logger, service ports.Collector) *Handler {
 
 func (h Handler) Handle(ctx echo.Context) error {
 	var payload domains.AuthenticationData
-	if err := ctx.Bind(payload); err != nil {
+	if err := ctx.Bind(&payload); err != nil {
 		h.logger.Error("Impossible to read request payload", zap.Error(err))
 		return ctx.JSON(http.StatusBadRequest, err.Error())
 	}
