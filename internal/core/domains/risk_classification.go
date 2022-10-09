@@ -4,7 +4,7 @@ type (
 	RiskClassification string
 
 	Risk struct {
-		Score          float64
+		Score          float32
 		Classification RiskClassification
 	}
 )
@@ -14,3 +14,7 @@ const (
 	MEDIUM RiskClassification = "MEDIUM"
 	LOW    RiskClassification = "LOW"
 )
+
+func (r *Risk) AddScore(score float32) {
+	r.Score += score
+}

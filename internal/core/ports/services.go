@@ -6,5 +6,6 @@ type Collector interface {
 	Collect(data domains.AuthenticationData) error
 }
 
-type Analyzer interface {
+type RiskEvaluator interface {
+	Evaluate(userProfile domains.UserProfile, attempt domains.AuthenticationData) (domains.Risk, error)
 }

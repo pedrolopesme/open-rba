@@ -5,7 +5,10 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/pedrolopesme/open-rba/internal/api/handlers/collect"
+	"github.com/pedrolopesme/open-rba/internal/api/handlers/evaluator"
+	collect "github.com/pedrolopesme/open-rba/internal/api/handlers/evaluator"
 	"github.com/pedrolopesme/open-rba/internal/core/services/collector"
+	riskevaluator "github.com/pedrolopesme/open-rba/internal/core/services/risk_evaluator"
 	"github.com/pedrolopesme/open-rba/internal/persistence/memory"
 	"go.uber.org/zap"
 )
@@ -34,8 +37,10 @@ func (a *API) Setup() {
 
 	persistence := memory.NewMemory()
 	collectorService := collector.NewCollectorService(a.logger, persistence)
+	evaluatorService := riskevaluator.NewRiskEvaluatorService(a.logger, persistence)
 
 	e.POST("/collect", collect.NewHandler(a.logger, collectorService).Handle)
+	e.POST("/evaluate", evaluator.NewHandler(a.logger, evaluatorService).Handle)
 }
 
 func (a *API) Run() {
