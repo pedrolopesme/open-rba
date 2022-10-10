@@ -34,7 +34,7 @@ func calculateClassification(risk domains.Risk) domains.Risk {
 	if risk.Score >= 80 {
 		risk.Classification = domains.LOW
 	} else if risk.Score >= 50 {
-		risk.Classification = domains.LOW
+		risk.Classification = domains.MEDIUM
 	} else {
 		risk.Classification = domains.HIGH
 	}
