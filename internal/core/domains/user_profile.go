@@ -25,5 +25,5 @@ func (up *UserProfile) GetCountryPercentage(entry string) float32 {
 		return 0
 	}
 
-	return float32(totalItem) + 100/float32(total)
+	return float32(totalItem) * 100 / float32(total)
 }

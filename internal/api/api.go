@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/pedrolopesme/open-rba/internal/api/handlers/collect"
 	"github.com/pedrolopesme/open-rba/internal/api/handlers/evaluator"
-	collect "github.com/pedrolopesme/open-rba/internal/api/handlers/evaluator"
 	"github.com/pedrolopesme/open-rba/internal/core/services/collector"
 	riskevaluator "github.com/pedrolopesme/open-rba/internal/core/services/risk_evaluator"
 	"github.com/pedrolopesme/open-rba/internal/persistence/memory"

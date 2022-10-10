@@ -23,6 +23,15 @@ func NewRiskEvaluatorService(logger zap.Logger, persistence ports.Repository) *R
 func (r *RiskEvaluatorService) Evaluate(userProfile domains.UserProfile, attempt domains.AuthenticationData) (domains.Risk, error) {
 	risk := domains.Risk{}
 	risk.AddScore(r.evaluateCountry(userProfile, attempt.Country))
+
+	if risk.Score >= 80 {
+		risk.Classification = domains.LOW
+	} else if risk.Score >= 50 {
+		risk.Classification = domains.LOW
+	} else {
+		risk.Classification = domains.HIGH
+	}
+
 	return risk, nil
 }
 
