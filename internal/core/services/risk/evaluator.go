@@ -1,4 +1,4 @@
-package riskevaluator
+package risk
 
 import (
 	"github.com/pedrolopesme/open-rba/internal/core/domains"
