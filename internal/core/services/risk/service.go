@@ -6,21 +6,21 @@ import (
 	"go.uber.org/zap"
 )
 
-type RiskEvaluatorService struct {
+type RiskService struct {
 	risk_profile domains.RiskProfile
 	persistence  ports.Repository
 	logger       zap.Logger
 }
 
-func NewRiskEvaluatorService(logger zap.Logger, persistence ports.Repository) *RiskEvaluatorService {
-	return &RiskEvaluatorService{
+func NewRiskService(logger zap.Logger, persistence ports.Repository) *RiskService {
+	return &RiskService{
 		risk_profile: *domains.NewDefaultRisckWeight(),
 		persistence:  persistence,
 		logger:       logger,
 	}
 }
 
-func (r *RiskEvaluatorService) Evaluate(userProfile domains.UserProfile, attempt domains.AuthenticationData) (domains.Risk, error) {
+func (r *RiskService) Evaluate(userProfile domains.UserProfile, attempt domains.AuthenticationData) (domains.Risk, error) {
 	risk := domains.Risk{}
 	risk.AddScore(r.evaluateCountry(userProfile, attempt.Country))
 
@@ -35,7 +35,7 @@ func (r *RiskEvaluatorService) Evaluate(userProfile domains.UserProfile, attempt
 	return risk, nil
 }
 
-func (r *RiskEvaluatorService) evaluateCountry(userProfile domains.UserProfile, attempt string) float32 {
+func (r *RiskService) evaluateCountry(userProfile domains.UserProfile, attempt string) float32 {
 	totalWeight := r.risk_profile.TotalWeight()
 	countryWeight := userProfile.GetCountryPercentage(attempt)
 

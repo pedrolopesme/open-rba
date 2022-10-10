@@ -36,7 +36,7 @@ func (a *API) Setup() {
 
 	persistence := memory.NewMemory()
 	collectorService := collector.NewCollectorService(a.logger, persistence)
-	evaluatorService := risk.NewRiskEvaluatorService(a.logger, persistence)
+	evaluatorService := risk.NewRiskService(a.logger, persistence)
 
 	e.POST("/collect", collect.NewHandler(a.logger, collectorService).Handle)
 	e.POST("/evaluate", evaluator.NewHandler(a.logger, evaluatorService).Handle)
