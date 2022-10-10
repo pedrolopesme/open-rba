@@ -1,1 +1,16 @@
 package evaluators
+
+import "github.com/pedrolopesme/open-rba/internal/core/domains"
+
+type CountryEvaluator struct{}
+
+func (c CountryEvaluator) Evaluate(riskProfile domains.RiskProfile, userProfile domains.UserProfile, attempt domains.AuthenticationData) float32 {
+	totalWeight := riskProfile.TotalWeight()
+	countryWeight := userProfile.GetCountryPercentage(attempt.Country)
+
+	if totalWeight == 0 {
+		return 0.0
+	}
+
+	return countryWeight * 100 / float32(totalWeight)
+}
