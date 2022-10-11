@@ -12,6 +12,7 @@ type RiskService struct {
 	persistence      ports.Repository
 	logger           zap.Logger
 	countryEvaluator evaluators.Evaluator
+	regionEvaluator  evaluators.Evaluator
 }
 
 func NewRiskService(logger zap.Logger, persistence ports.Repository) *RiskService {
@@ -20,12 +21,14 @@ func NewRiskService(logger zap.Logger, persistence ports.Repository) *RiskServic
 		persistence:      persistence,
 		logger:           logger,
 		countryEvaluator: evaluators.CountryEvaluator{},
+		regionEvaluator:  evaluators.RegionEvaluator{},
 	}
 }
 
 func (r *RiskService) Evaluate(userProfile domains.UserProfile, attempt domains.AuthenticationData) (domains.Risk, error) {
 	risk := domains.Risk{}
 	risk.AddScore(r.countryEvaluator.Evaluate(r.riskProfile, userProfile, attempt))
+	risk.AddScore(r.regionEvaluator.Evaluate(r.riskProfile, userProfile, attempt))
 	risk = calculateClassification(risk)
 	return risk, nil
 }

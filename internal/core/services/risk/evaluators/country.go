@@ -12,5 +12,5 @@ func (c CountryEvaluator) Evaluate(riskProfile domains.RiskProfile, userProfile 
 		return 0.0
 	}
 
-	return countryWeight * 100 / float32(totalWeight)
+	return countryWeight * float32(riskProfile.CountryFactor) / float32(totalWeight)
 }

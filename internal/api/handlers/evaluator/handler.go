@@ -33,6 +33,9 @@ func (h Handler) Handle(ctx echo.Context) error {
 		Countries: []domains.UserProfileStatistics{
 			{Entry: "BRAZIL", Total: 10},
 		},
+		Regions: []domains.UserProfileStatistics{
+			{Entry: "RJ", Total: 10},
+		},
 	}
 
 	if risk, err := h.service.Evaluate(mockedUserStatistics, payload); err != nil {
