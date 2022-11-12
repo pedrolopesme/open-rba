@@ -3,7 +3,8 @@ package api
 import (
 	"fmt"
 
-	"github.com/labstack/echo/v4"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/pedrolopesme/open-rba/internal/api/handlers/collect"
 	"github.com/pedrolopesme/open-rba/internal/api/handlers/evaluator"
 	"github.com/pedrolopesme/open-rba/internal/core/services/collector"
@@ -18,31 +19,35 @@ const (
 
 type API struct {
 	logger zap.Logger
-	echo   echo.Echo
+	app    *fiber.App
 }
 
 func NewAPI() *API {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
 
+	app := fiber.New()
+	app.Use(cors.New())
+
 	return &API{
 		logger: *logger,
-		echo:   *echo.New(),
+		app:    app,
 	}
 }
 
 func (a *API) Setup() {
-	e := a.echo
+	app := a.app
 
 	persistence := memory.NewMemory()
 	collectorService := collector.NewCollectorService(a.logger, persistence)
 	evaluatorService := risk.NewRiskService(a.logger, persistence)
 
-	e.POST("/collect", collect.NewHandler(a.logger, collectorService).Handle)
-	e.POST("/evaluate", evaluator.NewHandler(a.logger, evaluatorService).Handle)
+	app.Post("/collect", collect.NewHandler(a.logger, collectorService).Handle)
+	app.Post("/evaluate", evaluator.NewHandler(a.logger, evaluatorService).Handle)
 }
 
 func (a *API) Run() {
 	a.logger.Info(fmt.Sprintf("Starting up application at port %d", PORT))
-	a.echo.Logger.Fatal(a.echo.Start(fmt.Sprintf(":%d", PORT)))
+	app := a.app
+	app.Listen(fmt.Sprintf(":%d", PORT))
 }

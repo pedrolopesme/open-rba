@@ -3,7 +3,7 @@ package evaluator
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/gofiber/fiber/v2"
 	"github.com/pedrolopesme/open-rba/internal/core/domains"
 	"github.com/pedrolopesme/open-rba/internal/core/ports"
 	"go.uber.org/zap"
@@ -21,11 +21,11 @@ func NewHandler(logger zap.Logger, service ports.RiskEvaluator) *Handler {
 	}
 }
 
-func (h Handler) Handle(ctx echo.Context) error {
+func (h Handler) Handle(ctx *fiber.Ctx) error {
 	var payload domains.AuthenticationData
-	if err := ctx.Bind(&payload); err != nil {
+	if err := ctx.BodyParser(&payload); err != nil {
 		h.logger.Error("Impossible to read request payload", zap.Error(err))
-		return ctx.JSON(http.StatusBadRequest, err.Error())
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	mockedUserStatistics := domains.UserProfile{
@@ -40,8 +40,8 @@ func (h Handler) Handle(ctx echo.Context) error {
 
 	if risk, err := h.service.Evaluate(mockedUserStatistics, payload); err != nil {
 		h.logger.Error("Impossible to evaluate", zap.Error(err))
-		return ctx.JSON(http.StatusBadRequest, err.Error())
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	} else {
-		return ctx.JSON(http.StatusOK, risk)
+		return ctx.Status(http.StatusOK).JSON(risk)
 	}
 }
